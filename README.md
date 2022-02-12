@@ -1,7 +1,11 @@
 # APUE
 unix环境编程
 
-参考资料
+简介. 
+仓库内为Linux系统编程+Linux网络编程上的代码，书建议用《Linux/unix系统编程手册(上/下)》。
+
+参考资料. 
+
 《Linux/unix系统编程手册(上/下)》.  
 
 [Linux系统编程（李慧琴）](https://www.bilibili.com/video/BV1yJ411S7r6?p=75&spm_id_from=pageDriver)  
