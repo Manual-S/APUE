@@ -16,6 +16,7 @@
 #include <net/if.h>
 
 #include "server_conf.h"
+#include "thr_channel.h"
 
 /*
 -M 指定多播组
@@ -47,21 +48,21 @@ static int socket_init()
     struct ip_mreqn mreq;
     int errcode;
 
-    inet_pton(AF_INT,server_conf.mgroup,&mreq.imr_multiaddr);
-    inet_pton(AF_INT,"0.0.0.0",&mreq.imr_address);
+    inet_pton(AF_INT, server_conf.mgroup, &mreq.imr_multiaddr);
+    inet_pton(AF_INT, "0.0.0.0", &mreq.imr_address);
     mreq.imr_ifindex = if_nametoindex(server_conf.ifname);
 
-    serversd = socket(AF_INET,SOCK_DGRAM,0);
-    if(serversd < 0)
+    serversd = socket(AF_INET, SOCK_DGRAM, 0);
+    if (serversd < 0)
     {
-        syslog(LOG_ERR,"socket() %s",strerror(errno));
+        syslog(LOG_ERR, "socket() %s", strerror(errno));
         exit(1);
     }
 
-    errcode = setsockopt(serversd,IPPROTO_IP,IP_MULTICAST_IF,&mreq,sizeof(mreq));
-    if(errcode < 0)
+    errcode = setsockopt(serversd, IPPROTO_IP, IP_MULTICAST_IF, &mreq, sizeof(mreq));
+    if (errcode < 0)
     {
-        syslog(LOG_ERR,"setsockopt %s",strerror(errno));
+        syslog(LOG_ERR, "setsockopt %s", strerror(errno));
         exit(1);
     }
 }
@@ -199,15 +200,24 @@ int main(int argc, char *argv[])
 
     /*获取频道信息*/
     struct media_listentry_st *list;
-    int list_size = 0
-    errcode = mlib_getchnlist(list,list_size);
+    int list_size = 0;
+    errcode = mlib_getchnlist(list, list_size);
     if (errcode < 0)
     {
-
     }
     /*创建节目单线程*/
-
+    errcode = thr_list_create(list, list_size);
+    if (errcode < 0)
+    {
+    }
     /*创建频道线程*/
+
+    for(i = 0;i < list_size;i++)
+    {
+        thr_channel_create(list+i);
+    }
+
+    
 
     exit(0);
 }
