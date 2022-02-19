@@ -8,6 +8,7 @@ struct client_conf_st
     char *player_cmd;
 };
 
-#define DEFAULT_PLAYERCMD ""  // Mplayer的位置
+#define DEFAULT_PLAYERCMD " - "  // Mplayer的位置
+extern struct client_conf_st client_conf;
 
 #endif
