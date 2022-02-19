@@ -2,11 +2,14 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <unistd.h>
-#include <sys/types.h> /* See NOTES */
+#include <sys/types.h>
 #include <sys/socket.h>
 #include <net/if.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <getopt.h>
 #include "client.h"
-#include "proto.h"
+#include "../include/proto.h"
 
 /*
 -M --mgroup  指定多播组
@@ -19,7 +22,6 @@ struct client_conf_st client_conf = {
     .rcvport = DEFAULT_RCVPORT,
     .mgroup = DEFAULT_MGROUP,
     .player_cmd = DEFAULT_PLAYERCMD,
-
 };
 
 static void printhelp()
@@ -27,7 +29,7 @@ static void printhelp()
     printf("-P --Port 指定端口\n");
     printf("-M --mgroup 指定多播地址\n");
     printf("-p --player 指定播放器\n");
-    prinitf("-H --help 显示帮助\n");
+    printf("-H --help 显示帮助\n");
 }
 // 管道是尽力写 会照顾慢的一方
 int writepipe(int fd, const void *buf, size_t len)
@@ -61,6 +63,7 @@ int main(int argc, char *argv[])
     int len;
     int chosenid;
     int ret;
+    struct msg_channel_st *msg_channel;
     struct sockaddr_in server_addr;
     socklen_t server_addr_len;
     struct sockaddr_in laddr;
@@ -94,7 +97,7 @@ int main(int argc, char *argv[])
         case 'p':
             break;
         case 'H':
-            printfhelp("");
+            printhelp();
             exit(0);
             break;
         default:
@@ -112,7 +115,7 @@ int main(int argc, char *argv[])
     /*client端加入一个多播组*/
     inet_pton(AF_INET,
               client_conf.mgroup,
-              mreqn.imr_multiaddr);
+              &mreqn.imr_multiaddr);
 
     inet_pton(AF_INET, "0.0.0.0", &mreqn.imr_address);
     mreqn.imr_ifindex = if_nametoindex("eth0");
@@ -128,10 +131,9 @@ int main(int argc, char *argv[])
 
     laddr.sin_family = AF_INET;
     laddr.sin_port = htons(atoi(client_conf.rcvport));
-    ladrr.addr
-        inet_pton(AF_INET, "", &laddr.sin_addr);
+    inet_pton(AF_INET, "0.0.0.0", &laddr.sin_addr);
 
-    errcode = bind(sd, () & laddr, sizeof(laddr));
+    errcode = bind(sd, (void*) & laddr, sizeof(laddr));
     if (errcode < 0)
     {
         printf("bind error\n");
@@ -209,7 +211,7 @@ int main(int argc, char *argv[])
         struct msg_listentry_st *pos;
         for (pos = msg_list->entry;
              (char *)pos != (char *)(msg_list + len);
-             pos = (void *)((char *)pos) + ntohs(pos->len)))
+             pos = (void *)((char *)pos) + ntohs(pos->len))
             {
                 printf("channel: %d:%s\n", pos->chnid, pos->desc);
             }
@@ -222,7 +224,7 @@ int main(int argc, char *argv[])
             ret = scanf("%d", &chosenid);
             if (ret != 1)
             {
-                prinitf("chnnid id error\n");
+                printf("chnnid id error\n");
                 exit(1);
             }
         }
@@ -237,7 +239,7 @@ int main(int argc, char *argv[])
         {
             len = recvfrom(sd, msg_channel,
                            MSG_CHANNEL_MAX, 0,
-                           (struct sockaddr *)raddr, &raddr_len);
+                           (struct sockaddr *)&raddr, &raddr_len);
 
             if (raddr.sin_addr.s_addr != server_addr.sin_addr.s_addr ||
                 raddr.sin_port != server_addr.sin_port)
@@ -256,7 +258,7 @@ int main(int argc, char *argv[])
             {
                 //
                 printf("accept mesaage from %d", msg_channel->chnid);
-                if ()
+                if ((writepipe(pd[1],msg_channel->data,len - sizeof(chnid_t)) < 0))
                 {
                     printf("write pipe error\n");
                     exit(1);

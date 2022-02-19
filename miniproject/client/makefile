@@ -1,4 +1,4 @@
-CFLAG+=-I../include/ -Wall
+CFLAG+=-I../include/ 
 all:client
 client:client.o
 	gcc $^ -o $@ $(CFLAGS)
