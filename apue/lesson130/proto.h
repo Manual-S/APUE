@@ -1,9 +1,6 @@
 #ifndef PROTO_H__
 #define PROTO_H__
-#include <stdint.h>
 #define RCVPORT "6666"
-
-#define NAMESIZE 11
 
 struct msg_st
 {
@@ -12,4 +9,6 @@ struct msg_st
     unsigned int chinese;
 };
 
+
+#define NAMESIZE 11
 #endif
