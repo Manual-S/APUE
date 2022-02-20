@@ -18,7 +18,7 @@ gcc: gcc version 9.3.0
 线程  
 高级io  
 管道  
-进程间通信  
+进程间通信  leeson82 - lesson99  
 套接字  
 线程并发高级部分  
 项目
