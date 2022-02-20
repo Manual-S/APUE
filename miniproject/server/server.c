@@ -204,7 +204,10 @@ int main(int argc, char *argv[])
     errcode = mlib_getchnlist(list, list_size);
     if (errcode < 0)
     {
+
     }
+
+    
     /*创建节目单线程*/
     errcode = thr_list_create(list, list_size);
     if (errcode < 0)

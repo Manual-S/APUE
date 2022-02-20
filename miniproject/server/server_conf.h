@@ -19,4 +19,6 @@ struct server_conf_st
     char* ifname;  // 记录走那个网卡
 };
 
+extern struct server_conf_st server_conf;
+
 #endif
