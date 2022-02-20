@@ -1,10 +1,14 @@
 # APUE
 unix环境编程
 
-简介. 
+- 简介. 
 仓库内为Linux系统编程+Linux网络编程上的代码，书建议用《Linux/unix系统编程手册(上/下)》。
 
-参考资料. 
+- 环境：
+ubuntu:Ubuntu 20.04.3 LTS
+gcc: gcc version 9.3.0
+
+- 参考资料. 
 
 《Linux/unix系统编程手册(上/下)》.  
 

@@ -32,6 +32,9 @@ struct server_conf_st server_conf = {
     .runmode = RUN_DAEMON,
     .ifname = DEFAULT_IF};
 
+int serversd;
+struct sockaddr_in sndaddr;
+
 static void print_help()
 {
     printf("-P 配置端口\n");
@@ -65,6 +68,10 @@ static int socket_init()
         syslog(LOG_ERR, "setsockopt %s", strerror(errno));
         exit(1);
     }
+
+    sndaddr.sin_family = AF_INET;
+    sndaddr.sin_port = htons(atoi(server_conf.rcvport));
+    inet_pton(AF_INET,server_conf.mgroup,&sndaddr.sin_addr.s_addr);
 }
 
 // 信号响应函数
