@@ -2,7 +2,12 @@
 unix环境编程
 
 - 简介. 
-仓库内为Linux系统编程+Linux网络编程上的代码，书建议用《Linux/unix系统编程手册(上/下)》。
+仓库内为  
+Linux系统编程  
+Linux网络编程  
+shell编程  
+配套代码。  
+书建议用《Linux/unix系统编程手册(上/下)》。
 
 - 环境  
 ubuntu:Ubuntu 20.04.3 LTS  
