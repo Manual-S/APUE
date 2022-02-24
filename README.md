@@ -1,7 +1,7 @@
 # APUE
 unix环境编程
 
-- 简介. 
+- 简介  
 仓库内为  
 Linux系统编程  
 Linux网络编程  
@@ -28,6 +28,11 @@ gcc: gcc version 9.3.0
 项目
 
 - Linux网络编程目录  
+网络协议基础，tcp,udp,常用网络术语  
+socket错误处理，三次握手，并发  
+tcp状态转换，select,poll  
+epoll，epoll反应堆，心跳，线程池  
+udp，广播，组播，domain  
 
 
 - 参考资料  
